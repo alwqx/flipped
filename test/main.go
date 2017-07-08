@@ -15,9 +15,11 @@ func main() {
 	mc = storage.NewMysqlClient()
 	// testInsert()
 	// testQueryOne()
-	testQueryMore("1")
-	testQueryMore("-1")
+	// testQueryMore("1")
+	// testQueryMore("-1")
 	// testBatchInsert()
+	// fmt.Println(getTimestamp())
+	fakeHeartBeatData()
 }
 
 func testInsert() {
@@ -77,6 +79,7 @@ func testQueryMore(sortTag string) {
 	fmt.Println(heartList)
 }
 
+// get timestamp whose length is 13
 func getTimestamp() int64 {
-	return time.Now().Unix()
+	return time.Now().UnixNano() / 1000000
 }
