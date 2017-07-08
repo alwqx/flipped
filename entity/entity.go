@@ -2,8 +2,9 @@ package entity
 
 // HeartBeat model for heartbeat
 type HeartBeat struct {
-	Timestamp int64   `json:"timestamp"`
-	HeartRate float64 `json:"heart_rate"`
+	ID        int64 `json:"id"`
+	Timestamp int64 `json:"timestamp"`
+	HeartRate int16 `json:"heart_rate"`
 }
 
 // config

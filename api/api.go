@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/adolphlwq/flipped/entity"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -24,8 +25,10 @@ func FlippedServer() {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
+
 	r.GET("/health", health)
 	r.GET("/fake", fake)
+	r.POST("/data/heartbeat", heartbeatData)
 	r.Run(":9090")
 }
 
@@ -42,4 +45,19 @@ func fake(c *gin.Context) {
 		logrus.Fatalf("generate fake data error: %v", err)
 	}
 	c.JSON(http.StatusOK, gin.H{"data": b[0]})
+}
+
+func heartbeatData(c *gin.Context) {
+	var heartbeat entity.HeartBeat
+	if err := c.BindJSON(&heartbeat); err != nil {
+		logrus.Warnf("parse heartbeat from http post request error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "parse heartbeat from http post request error",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": heartbeat,
+	})
 }
