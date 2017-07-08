@@ -19,7 +19,11 @@ func main() {
 	// testQueryMore("-1")
 	// testBatchInsert()
 	// fmt.Println(getTimestamp())
-	fakeHeartBeatData()
+	// fakeHeartBeatData()
+	// testStrengthInsert()
+	// testBatchStrengthInsert()
+	// testStrengthQueryOne()
+	testStrengthQueryMore()
 }
 
 func testInsert() {
@@ -53,12 +57,8 @@ func testQueryOne() {
 	fmt.Println(heartbeat)
 }
 
-func testQueryMore(sortTag string) {
-	tag := "ASC"
-	if sortTag == "1" {
-		tag = "DESC"
-	}
-	sql := "SELECT * FROM heartbeat GROUP BY id " + tag + " LIMIT 10"
+func testQueryMore() {
+	sql := "SELECT * FROM heartbeat GROUP BY id LIMIT 10"
 	rows, err := mc.QueryMore(sql)
 	defer rows.Close()
 	if err != nil {
@@ -77,6 +77,59 @@ func testQueryMore(sortTag string) {
 	}
 
 	fmt.Println(heartList)
+}
+
+func testStrengthInsert() {
+	sql := `INSERT INTO heartstrength 
+		SET timestamp=?, heartstrength=?;`
+	_, err := mc.Insert(sql, "heartstrength", 1499522210946, 55)
+	if err != nil {
+		logrus.Fatalf("insert data to db error: %v", err)
+	}
+}
+
+func testBatchStrengthInsert() {
+	sql := `INSERT INTO heartstrength 
+		SET timestamp=?, heartstrength=?;`
+	values := []int16{22, 90, 88, 44, 0, 123, 40, 88}
+	for _, rate := range values {
+		_, err := mc.Insert(sql, "heartstrength", getTimestamp(), rate)
+		if err != nil {
+			logrus.Fatalf("insert data to db error: %v", err)
+		}
+	}
+}
+
+func testStrengthQueryOne() {
+	sql := "SELECT * FROM heartstrength"
+	row := mc.QueryOne(sql, "heartstrength")
+
+	var strength entity.HeartStrength
+	row.Scan(&strength.ID, &strength.Timestamp, &strength.HeartStrength)
+
+	fmt.Println(strength)
+}
+
+func testStrengthQueryMore() {
+	sql := "SELECT * FROM heartstrength GROUP BY id LIMIT 10"
+	rows, err := mc.QueryMore(sql)
+	defer rows.Close()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	var sList []entity.HeartStrength
+	for rows.Next() {
+		var s entity.HeartStrength
+		err := rows.Scan(&s.ID, &s.Timestamp, &s.HeartStrength)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		sList = append(sList, s)
+	}
+
+	fmt.Println(sList)
 }
 
 // get timestamp whose length is 13
