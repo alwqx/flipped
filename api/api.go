@@ -3,13 +3,27 @@ package api
 import (
 	crand "crypto/rand"
 	"net/http"
+	"time"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func FlippedServer() {
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowMethods: []string{"*"},
+		AllowHeaders: []string{"Content-Type"},
+		ExposeHeaders: []string{"Content-Length", "Access-Control-Allow-Origin",
+			"Access-Control-Allow-Headers", "Access-Control-Allow-Methods"},
+		//AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			logrus.Info("origin is ", origin)
+			return true
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 	r.GET("/health", health)
 	r.GET("/fake", fake)
 	r.Run(":9090")
