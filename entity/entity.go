@@ -7,6 +7,19 @@ type HeartBeat struct {
 	HeartRate int16 `json:"heart_rate"`
 }
 
+type HeartStrength struct {
+	ID            int64 `json:"id"`
+	Timestamp     int64 `json:"timestamp"`
+	HeartStrength int16 `json:"heart_strength"`
+}
+
+type KeyHeartStrength struct {
+	Key   string        `json:"key"`
+	Value HeartStrength `json:"value"`
+}
+
+type HSM map[string]HeartStrength
+
 // config
 type Mysql struct {
 	Address  string `json:"address"`

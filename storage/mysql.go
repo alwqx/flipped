@@ -57,6 +57,14 @@ func (mc *MysqlClient) initialize() {
 			PRIMARY KEY (id)
 		);
 	`
+	heartstrengthTable := `
+		CREATE TABLE IF NOT EXISTS ` + mc.DBName + `.heartstrength (
+			id INT(64) NOT NULL AUTO_INCREMENT,
+			timestamp VARCHAR(20) NOT NULL,
+			heartstrength INT(16) NOT NULL,
+			PRIMARY KEY (id)
+		);
+	`
 
 	db := mc.CreateBareDB()
 	defer db.Close()
@@ -72,6 +80,10 @@ func (mc *MysqlClient) initialize() {
 
 		if _, err := db.Exec(heartbeatTable); err != nil {
 			logrus.Fatalf("create table heartbeat error: %v", err)
+		}
+
+		if _, err := db.Exec(heartstrengthTable); err != nil {
+			logrus.Fatalf("create table heartstrength error: %v", err)
 		}
 	})
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func heartbeatData(c *gin.Context) {
+func postHeartbeatData(c *gin.Context) {
 	var heartbeat entity.HeartBeat
 	if err := c.BindJSON(&heartbeat); err != nil {
 		logrus.Warnf("parse heartbeat from http post request error: %v", err)

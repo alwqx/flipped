@@ -32,8 +32,10 @@ func FlippedServer() {
 
 	r.GET("/health", health)
 	r.GET("/fake", fake)
-	r.POST("/data/heartbeat", heartbeatData)
+	r.POST("/data/heartbeat", postHeartbeatData)
+	r.POST("/data/heartstrength/:batchsize", postHeartStrengthData)
 	r.GET("/data/heartbeat", fetchHeartBeatData)
+	r.GET("/data/heartstrength", fetchHeartStrengthData)
 
 	r.Run(":9090")
 }
