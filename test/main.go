@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/adolphlwq/flipped/entity"
 	"github.com/adolphlwq/flipped/storage"
 )
 
@@ -11,7 +13,11 @@ var mc *storage.MysqlClient
 
 func main() {
 	mc = storage.NewMysqlClient()
-	testInsert()
+	// testInsert()
+	// testQueryOne()
+	testQueryMore("1")
+	testQueryMore("-1")
+	// testBatchInsert()
 }
 
 func testInsert() {
@@ -33,6 +39,42 @@ func testBatchInsert() {
 			logrus.Fatalf("insert data to db error: %v", err)
 		}
 	}
+}
+
+func testQueryOne() {
+	sql := "SELECT * FROM heartbeat"
+	row := mc.QueryOne(sql, "heartbeat")
+
+	var heartbeat entity.HeartBeat
+	row.Scan(&heartbeat.ID, &heartbeat.Timestamp, &heartbeat.HeartRate)
+
+	fmt.Println(heartbeat)
+}
+
+func testQueryMore(sortTag string) {
+	tag := "ASC"
+	if sortTag == "1" {
+		tag = "DESC"
+	}
+	sql := "SELECT * FROM heartbeat GROUP BY id " + tag + " LIMIT 10"
+	rows, err := mc.QueryMore(sql)
+	defer rows.Close()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	var heartList []entity.HeartBeat
+	for rows.Next() {
+		var heart entity.HeartBeat
+		err := rows.Scan(&heart.ID, &heart.Timestamp, &heart.HeartRate)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		heartList = append(heartList, heart)
+	}
+
+	fmt.Println(heartList)
 }
 
 func getTimestamp() int64 {

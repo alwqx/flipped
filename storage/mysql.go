@@ -108,6 +108,7 @@ func (mc *MysqlClient) STMTFactory(predSQL string, db *sql.DB) *sql.Stmt {
 
 func (mc *MysqlClient) Insert(sql, dbname string, args ...interface{}) (sql.Result, error) {
 	db := mc.CreateDB()
+	defer db.Close()
 	stmt := mc.STMTFactory(sql, db)
 	defer stmt.Close()
 
@@ -116,16 +117,20 @@ func (mc *MysqlClient) Insert(sql, dbname string, args ...interface{}) (sql.Resu
 	return result, err
 }
 
-func (mc *MysqlClient) QueryOne(sql string, args ...interface{}) *sql.Row {
+func (mc *MysqlClient) QueryOne(sql, dbname string, args ...interface{}) *sql.Row {
 	db := mc.CreateDB()
+	defer db.Close()
 	stmt := mc.STMTFactory(sql, db)
 	defer stmt.Close()
 
 	return stmt.QueryRow(args...)
 }
 
-// func (mc *MysqlClient) QueryMore(sql string, args ...interface{}) {
-// 	db := mc.CreateDB()
-// 	stmt := mc.STMTFactory(sql, db)
-// 	defer stmt.Close()
-// }
+func (mc *MysqlClient) QueryMore(sql string, args ...interface{}) (*sql.Rows, error) {
+	db := mc.CreateDB()
+	defer db.Close()
+	stmt := mc.STMTFactory(sql, db)
+	defer stmt.Close()
+
+	return stmt.Query(args...)
+}
