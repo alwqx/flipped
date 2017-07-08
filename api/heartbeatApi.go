@@ -42,7 +42,7 @@ func fetchHeartBeatData(c *gin.Context) {
 		limit = "20"
 	}
 
-	sql := "SELECT * FROM heartbeat GROUP BY id DESC LIMIT " + limit
+	sql := `SELECT * FROM heartbeat GROUP BY id DESC LIMIT ` + limit + ";"
 
 	rows, err := mc.QueryMore(sql)
 	if err != nil {
