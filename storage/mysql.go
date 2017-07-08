@@ -52,7 +52,7 @@ func (mc *MysqlClient) initialize() {
 	heartbeatTable := `
 		CREATE TABLE IF NOT EXISTS ` + mc.DBName + `.heartbeat (
 			id INT(64) NOT NULL AUTO_INCREMENT,
-			timestamp INT(64) NOT NULL,
+			timestamp VARCHAR(20) NOT NULL,
 			heartrate INT(16) NOT NULL,
 			PRIMARY KEY (id)
 		);

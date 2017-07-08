@@ -17,6 +17,15 @@ func main() {
 func testInsert() {
 	heartbeatInsertSql := `INSERT INTO heartbeat 
 		SET timestamp=?, heartrate=?;`
+	_, err := mc.Insert(heartbeatInsertSql, "hearteat", 1499522210946, 55)
+	if err != nil {
+		logrus.Fatalf("insert data to db error: %v", err)
+	}
+}
+
+func testBatchInsert() {
+	heartbeatInsertSql := `INSERT INTO heartbeat 
+		SET timestamp=?, heartrate=?;`
 	values := []int16{22, 90, 88, 44, 0, 123, 40, 88}
 	for _, rate := range values {
 		_, err := mc.Insert(heartbeatInsertSql, "hearteat", getTimestamp(), rate)
