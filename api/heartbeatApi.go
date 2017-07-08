@@ -35,24 +35,14 @@ func heartbeatData(c *gin.Context) {
 }
 
 // fetchHeartBeatData url schema:
-// get /data/heartbeat?limit=10&sort=1
-// sort=1 asc else desc
+// get /data/heartbeat?limit=10
 func fetchHeartBeatData(c *gin.Context) {
 	limit, ok := c.GetQuery("limit")
 	if !ok {
 		limit = "20"
 	}
 
-	sort, ok := c.GetQuery("sort")
-	if !ok {
-		sort = "1"
-	}
-
-	tag := "ASC"
-	if sort == "1" {
-		tag = "DESC"
-	}
-	sql := "SELECT * FROM heartbeat GROUP BY id " + tag + " LIMIT " + limit
+	sql := "SELECT * FROM heartbeat GROUP BY id LIMIT " + limit
 
 	rows, err := mc.QueryMore(sql)
 	if err != nil {
