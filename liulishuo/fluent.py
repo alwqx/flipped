@@ -7,11 +7,10 @@ author: Vast
 """
 import base64
 import websocket
-
 import struct
 import wave
-
 import audioop
+
 def downsampleWav(src, dst, inrate=44100, outrate=16000, inchannels=2, outchannels=1):
     """
     改变音频文件
@@ -25,7 +24,7 @@ def downsampleWav(src, dst, inrate=44100, outrate=16000, inchannels=2, outchanne
     """
     import os
     if not os.path.exists(src):
-        print 'Source not found!'
+        print('Source not found!')
         return False
 
     # if not os.path.exists(os.path.dirname(dst)):
@@ -34,7 +33,7 @@ def downsampleWav(src, dst, inrate=44100, outrate=16000, inchannels=2, outchanne
         s_read = wave.open(src, 'r')
         s_write = wave.open(dst, 'w')
     except:
-        print 'Failed to open files!'
+        print('Failed to open files!')
         return False
 
     s_read = wave.open(src, 'r')
@@ -62,14 +61,14 @@ def downsampleWav(src, dst, inrate=44100, outrate=16000, inchannels=2, outchanne
         s_write.setparams((outchannels, 2, outrate, 0, 'NONE', 'Uncompressed'))
         s_write.writeframes(converted)
     except:
-        print 'Failed to write wav'
+        print('Failed to write wav')
         return False
 
     try:
         s_read.close()
         s_write.close()
     except:
-        print 'Failed to close wav files'
+        print('Failed to close wav files')
         return False
 
     return True
@@ -103,7 +102,7 @@ def Voice2Text(file):
 
     data = ws.recv()
     data=data[4:]
-    print data
+    print(data)
     #{"status":0,"msg":"","reqId":"","key":"3415fadb2ddc6a8c435e589bafb8583e","result":"d2VsY29tZSB0byBiZWlqaW5n","flag":0}
     # print data,'\n',data[data.find('result')+9:data.find('flag":')-3]
     # print base64.b64decode(data[data.find('result')+9:data.find('flag":')-3])

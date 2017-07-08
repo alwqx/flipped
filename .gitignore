@@ -2,3 +2,4 @@ config.json
 flipped
 vendor/*
 !vendor/vendor.json
+liulishuo/venv/*
