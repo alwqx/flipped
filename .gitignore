@@ -3,3 +3,5 @@ flipped
 vendor/*
 !vendor/vendor.json
 liulishuo/venv/*
+test/test
+liulishuo/out.wav

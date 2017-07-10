@@ -2,10 +2,19 @@
 
 A backend program for [Hack.init](http://hackinit.org/) project.
 
+<p align="center">
+  <a href="https://grox-ni.github.io/" target="_blank">
+    <img src="demo.png" width="700px">
+    <br>
+    Live Demo
+  </a>
+</p>
+
 ## Prerequisite
 - Golang
 - Govendor
 - Makefile
+- Mysql
 
 ## Quick start
 - config
@@ -25,3 +34,6 @@ make dev-build
 ```
 make dev-run
 ```
+
+## Frontend
+Thangs to @Grox-Ni, he writes the frontend project:[Flipped](https://github.com/Grox-Ni/Flipped)
