@@ -36,4 +36,4 @@ make dev-run
 ```
 
 ## Frontend
-Thangs to @Grox-Ni, he writes the frontend project:[Flipped](https://github.com/Grox-Ni/Flipped)
+Thanks to @Grox-Ni, he writes the frontend project:[Flipped](https://github.com/Grox-Ni/Flipped)
